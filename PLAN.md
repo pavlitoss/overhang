@@ -306,7 +306,33 @@ All app URLs are namespaced under the active organization. The user's current or
 
 ---
 
-## Docker Compose
+## Deployment
+
+### Infrastructure
+
+| Component | Details |
+|---|---|
+| Host | Home server running CasaOS |
+| Exposure | Cloudflare Tunnel — no open router ports |
+| SSL | Cloudflare terminates SSL — no Certbot needed |
+| Domain | Subdomain e.g. `overhang.yourdomain.com` |
+| Import | `docker-compose.yml` imported directly into CasaOS |
+
+### Traffic flow
+
+```
+Browser → Cloudflare (SSL) → Tunnel → homeserver:8080 → nginx → gunicorn:8000 → Django
+```
+
+Nginx only handles internal proxying — no SSL config needed since Cloudflare handles it.
+
+### Cloudflare Tunnel setup
+
+1. In Cloudflare Zero Trust dashboard: create a tunnel, point it at `http://localhost:8080`
+2. Add a public hostname: `overhang.yourdomain.com` → the tunnel
+3. Done — traffic arrives at port 8080 on the homeserver
+
+### Docker Compose
 
 ```yaml
 services:
@@ -315,6 +341,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file: .env
+    restart: unless-stopped
 
   web:
     build: .
@@ -325,20 +352,42 @@ services:
     depends_on:
       - db
     env_file: .env
+    restart: unless-stopped
 
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - media_files:/media
     depends_on:
       - web
+    restart: unless-stopped
 
 volumes:
   postgres_data:
   media_files:
+```
+
+### Deploying an update
+
+```bash
+git pull
+docker compose build web
+docker compose up -d
+```
+
+### Django settings for Cloudflare
+
+```python
+# production.py
+ALLOWED_HOSTS = ["overhang.yourdomain.com"]
+CSRF_TRUSTED_ORIGINS = ["https://overhang.yourdomain.com"]
+
+# Trust Cloudflare's forwarded headers
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ```
 
 ---
