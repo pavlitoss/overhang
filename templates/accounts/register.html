@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Register — Overhang{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[70vh]">
+    <div class="w-full max-w-sm">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-brand">Overhang</h1>
+            <p class="text-zinc-400 text-sm mt-1">Create your workspace</p>
+        </div>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div>
+                <label class="block text-sm text-zinc-400 mb-1">{{ field.label }}</label>
+                {% if field.field.widget.input_type == 'password' %}
+                <input type="password" name="{{ field.html_name }}" required
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand {% if field.errors %}border-red-700{% endif %}">
+                {% else %}
+                <input type="text" name="{{ field.html_name }}" value="{{ field.value|default:'' }}"
+                    {% if field.field.required %}required{% endif %}
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand {% if field.errors %}border-red-700{% endif %}">
+                {% endif %}
+                {% for error in field.errors %}
+                <p class="text-red-400 text-xs mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button type="submit"
+                class="w-full bg-brand hover:bg-brand-dark text-white font-medium rounded-lg px-4 py-2 text-sm transition-colors">
+                Create workspace
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-zinc-500 mt-6">
+            Already have an account?
+            <a href="{% url 'accounts:login' %}" class="text-brand hover:underline">Sign in</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

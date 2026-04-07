@@ -44,13 +44,16 @@
                 </div>
                 <div class="flex items-center gap-4 text-sm">
                     {% if user.is_authenticated %}
-                    <span class="text-zinc-500">{{ user.username }}</span>
-                    <form method="post" action="/accounts/logout/">
+                    {% if request.org %}
+                    <span class="text-zinc-500 hidden sm:inline">{{ request.org.name }}</span>
+                    {% endif %}
+                    <a href="{% url 'accounts:settings' %}" class="text-zinc-400 hover:text-zinc-100 transition-colors">{{ user.username }}</a>
+                    <form method="post" action="{% url 'accounts:logout' %}">
                         {% csrf_token %}
                         <button type="submit" class="text-zinc-400 hover:text-zinc-100 transition-colors">Logout</button>
                     </form>
                     {% else %}
-                    <a href="/accounts/login/" class="text-zinc-400 hover:text-zinc-100 transition-colors">Login</a>
+                    <a href="{% url 'accounts:login' %}" class="text-zinc-400 hover:text-zinc-100 transition-colors">Login</a>
                     {% endif %}
                 </div>
             </div>

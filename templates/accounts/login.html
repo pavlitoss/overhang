@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Login — Overhang{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[70vh]">
+    <div class="w-full max-w-sm">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-brand">Overhang</h1>
+            <p class="text-zinc-400 text-sm mt-1">Sign in to your workspace</p>
+        </div>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="px-4 py-3 rounded-lg bg-red-900/40 border border-red-800 text-red-300 text-sm">
+                Invalid username or password.
+            </div>
+            {% endif %}
+
+            <div>
+                <label class="block text-sm text-zinc-400 mb-1">Username</label>
+                <input type="text" name="username" autofocus required
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand">
+            </div>
+
+            <div>
+                <label class="block text-sm text-zinc-400 mb-1">Password</label>
+                <input type="password" name="password" required
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-brand hover:bg-brand-dark text-white font-medium rounded-lg px-4 py-2 text-sm transition-colors">
+                Sign in
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-zinc-500 mt-6">
+            No account?
+            <a href="{% url 'accounts:register' %}" class="text-brand hover:underline">Create one</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,10 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}Overhang — Dashboard{% endblock %}
+{% block title %}Dashboard — Overhang{% endblock %}
 
 {% block content %}
-<div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
-    <h1 class="text-4xl font-bold text-brand mb-2">Overhang</h1>
-    <p class="text-zinc-400 text-lg">3D printing business management</p>
+<div class="space-y-6">
+    <div>
+        <h1 class="text-2xl font-bold text-zinc-100">{{ request.org.name }}</h1>
+        <p class="text-zinc-500 text-sm mt-1">Dashboard</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <p class="text-xs text-zinc-500 uppercase tracking-wider">Entities</p>
+            <p class="text-3xl font-bold text-zinc-100 mt-2">—</p>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <p class="text-xs text-zinc-500 uppercase tracking-wider">Active Listings</p>
+            <p class="text-3xl font-bold text-zinc-100 mt-2">—</p>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <p class="text-xs text-zinc-500 uppercase tracking-wider">Filament Spools</p>
+            <p class="text-3xl font-bold text-zinc-100 mt-2">—</p>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <p class="text-xs text-zinc-500 uppercase tracking-wider">Portfolio Value</p>
+            <p class="text-3xl font-bold text-zinc-100 mt-2">—</p>
+        </div>
+    </div>
+
+    <p class="text-zinc-600 text-sm">More stats coming in Phase 8 once all modules are built.</p>
 </div>
 {% endblock %}

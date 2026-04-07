@@ -13,7 +13,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    # Local apps (added per phase)
+    # Local apps
+    "apps.accounts",
 ]
 
 MIDDLEWARE = [
@@ -24,6 +25,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "apps.accounts.middleware.OrganizationMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
