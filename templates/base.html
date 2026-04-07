@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-zinc-950">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Overhang{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#f97316',
+                            dark: '#ea580c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body class="h-full text-zinc-100" hx-boost="true">
+
+    <!-- Navbar -->
+    <nav class="bg-zinc-900 border-b border-zinc-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <div class="flex items-center gap-8">
+                    <a href="/" class="text-brand font-bold text-lg tracking-tight">Overhang</a>
+                    {% if user.is_authenticated %}
+                    <div class="hidden md:flex items-center gap-6 text-sm text-zinc-400">
+                        <a href="/catalog/" class="hover:text-zinc-100 transition-colors">Catalog</a>
+                        <a href="/inventory/" class="hover:text-zinc-100 transition-colors">Filament</a>
+                        <a href="/pricing/" class="hover:text-zinc-100 transition-colors">Pricing</a>
+                        <a href="/printers/" class="hover:text-zinc-100 transition-colors">Printers</a>
+                        <a href="/vinted/" class="hover:text-zinc-100 transition-colors">Vinted</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="flex items-center gap-4 text-sm">
+                    {% if user.is_authenticated %}
+                    <span class="text-zinc-500">{{ user.username }}</span>
+                    <form method="post" action="/accounts/logout/">
+                        {% csrf_token %}
+                        <button type="submit" class="text-zinc-400 hover:text-zinc-100 transition-colors">Logout</button>
+                    </form>
+                    {% else %}
+                    <a href="/accounts/login/" class="text-zinc-400 hover:text-zinc-100 transition-colors">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        {% for message in messages %}
+        <div class="mb-2 px-4 py-3 rounded-lg text-sm
+            {% if message.tags == 'error' %}bg-red-900/50 text-red-300 border border-red-800
+            {% elif message.tags == 'success' %}bg-green-900/50 text-green-300 border border-green-800
+            {% else %}bg-zinc-800 text-zinc-300 border border-zinc-700{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>
