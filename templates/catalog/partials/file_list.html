@@ -1,0 +1,33 @@
+{% with files=entity.files.all %}
+{% if files %}
+<ul class="space-y-2">
+    {% for f in files %}
+    <li class="flex items-center justify-between py-2 border-b border-zinc-800 last:border-0">
+        <div class="flex items-center gap-3 min-w-0">
+            <span class="text-xs font-mono bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded uppercase shrink-0">{{ f.file_type }}</span>
+            <div class="min-w-0">
+                <p class="text-sm text-zinc-200 truncate">{{ f.label|default:f.file.name|truncatechars:40 }}</p>
+                <p class="text-xs text-zinc-600 truncate">{{ f.file.name }}</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0 ml-3">
+            <a href="{{ f.file.url }}" download
+                class="text-xs text-zinc-400 hover:text-zinc-200 transition-colors">
+                Download
+            </a>
+            <button
+                hx-post="{% url 'catalog:delete_file' entity.slug f.id %}"
+                hx-target="#file-list"
+                hx-swap="innerHTML"
+                hx-confirm="Delete this file?"
+                class="text-xs text-red-400 hover:text-red-300 transition-colors">
+                Delete
+            </button>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="text-sm text-zinc-600 py-4 text-center">No files yet. Upload an STL, 3MF, or OBJ above.</p>
+{% endif %}
+{% endwith %}

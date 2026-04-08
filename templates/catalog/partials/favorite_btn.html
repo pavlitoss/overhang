@@ -1,0 +1,8 @@
+<button
+    hx-post="{% url 'catalog:toggle_favorite' entity.slug %}"
+    hx-target="#fav-{{ entity.slug }}"
+    hx-swap="innerHTML"
+    class="text-xl leading-none transition-colors {% if entity.is_favorite %}text-brand{% else %}text-zinc-600 hover:text-zinc-400{% endif %}"
+    title="{% if entity.is_favorite %}Remove from favorites{% else %}Add to favorites{% endif %}">
+    ★
+</button>

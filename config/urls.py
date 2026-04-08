@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("apps.accounts.urls")),
+    path("catalog/", include("apps.catalog.urls")),
     path("", login_required(TemplateView.as_view(template_name="index.html")), name="home"),
 ]
 

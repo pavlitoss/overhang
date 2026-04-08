@@ -34,11 +34,11 @@
                     <a href="/" class="text-brand font-bold text-lg tracking-tight">Overhang</a>
                     {% if user.is_authenticated %}
                     <div class="hidden md:flex items-center gap-6 text-sm text-zinc-400">
-                        <a href="/catalog/" class="hover:text-zinc-100 transition-colors">Catalog</a>
-                        <a href="/inventory/" class="hover:text-zinc-100 transition-colors">Filament</a>
-                        <a href="/pricing/" class="hover:text-zinc-100 transition-colors">Pricing</a>
-                        <a href="/printers/" class="hover:text-zinc-100 transition-colors">Printers</a>
-                        <a href="/vinted/" class="hover:text-zinc-100 transition-colors">Vinted</a>
+                        <a href="{% url 'catalog:list' %}" class="hover:text-zinc-100 transition-colors">Catalog</a>
+                        <a href="#" class="hover:text-zinc-100 transition-colors opacity-40 cursor-not-allowed">Filament</a>
+                        <a href="#" class="hover:text-zinc-100 transition-colors opacity-40 cursor-not-allowed">Pricing</a>
+                        <a href="#" class="hover:text-zinc-100 transition-colors opacity-40 cursor-not-allowed">Printers</a>
+                        <a href="#" class="hover:text-zinc-100 transition-colors opacity-40 cursor-not-allowed">Vinted</a>
                     </div>
                     {% endif %}
                 </div>

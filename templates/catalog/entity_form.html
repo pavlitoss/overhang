@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}{{ action }} Entity — Overhang{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl space-y-6">
+
+    <div class="flex items-center gap-3">
+        <a href="{% if entity %}{% url 'catalog:detail' entity.slug %}{% else %}{% url 'catalog:list' %}{% endif %}"
+            class="text-zinc-500 hover:text-zinc-300 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+        </a>
+        <h1 class="text-xl font-semibold text-zinc-100">{{ action }} Entity</h1>
+    </div>
+
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Basic info -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
+            <h2 class="text-sm font-medium text-zinc-400 uppercase tracking-wider">Basic Info</h2>
+
+            <div>
+                <label class="block text-sm text-zinc-400 mb-1">Title <span class="text-red-500">*</span></label>
+                <input type="text" name="title" value="{{ form.title.value|default:'' }}" required
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand {% if form.title.errors %}border-red-700{% endif %}">
+                {% for e in form.title.errors %}<p class="text-red-400 text-xs mt-1">{{ e }}</p>{% endfor %}
+            </div>
+
+            <div>
+                <label class="block text-sm text-zinc-400 mb-1">Description</label>
+                <textarea name="description" rows="4"
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand resize-none">{{ form.description.value|default:'' }}</textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm text-zinc-400 mb-1">Category</label>
+                    <select name="category"
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand">
+                        {% for value, label in form.fields.category.choices %}
+                        <option value="{{ value }}" {% if form.category.value == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-zinc-400 mb-1">Material</label>
+                    <select name="material_type"
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand">
+                        {% for value, label in form.fields.material_type.choices %}
+                        <option value="{{ value }}" {% if form.material_type.value == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm text-zinc-400 mb-1">Tags</label>
+                <input type="text" name="tags_input" value="{{ form.tags_input.value|default:'' }}"
+                    placeholder="dragon, fantasy, figurine"
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand">
+                <p class="text-zinc-600 text-xs mt-1">Comma-separated</p>
+            </div>
+        </div>
+
+        <!-- Print details -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
+            <h2 class="text-sm font-medium text-zinc-400 uppercase tracking-wider">Print Details</h2>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm text-zinc-400 mb-1">Est. weight (g)</label>
+                    <input type="number" name="estimated_weight_g" step="0.01" min="0"
+                        value="{{ form.estimated_weight_g.value|default:'' }}"
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand">
+                </div>
+                <div>
+                    <label class="block text-sm text-zinc-400 mb-1">Est. print time (h)</label>
+                    <input type="number" name="estimated_print_hours" step="0.25" min="0"
+                        value="{{ form.estimated_print_hours.value|default:'' }}"
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-brand">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <label class="flex items-center gap-2 text-sm text-zinc-400 cursor-pointer">
+                    <input type="checkbox" name="support_required"
+                        {% if form.support_required.value %}checked{% endif %}
+                        class="accent-brand w-4 h-4">
+                    Supports required
+                </label>
+                <label class="flex items-center gap-2 text-sm text-zinc-400 cursor-pointer">
+                    <input type="checkbox" name="is_active"
+                        {% if form.is_active.value != False %}checked{% endif %}
+                        class="accent-brand w-4 h-4">
+                    Active (visible in Vinted generator)
+                </label>
+                <label class="flex items-center gap-2 text-sm text-zinc-400 cursor-pointer">
+                    <input type="checkbox" name="is_favorite"
+                        {% if form.is_favorite.value %}checked{% endif %}
+                        class="accent-brand w-4 h-4">
+                    Favorite
+                </label>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button type="submit"
+                class="bg-brand hover:bg-brand-dark text-white font-medium rounded-lg px-5 py-2 text-sm transition-colors">
+                {{ action }} entity
+            </button>
+            <a href="{% if entity %}{% url 'catalog:detail' entity.slug %}{% else %}{% url 'catalog:list' %}{% endif %}"
+                class="text-sm text-zinc-500 hover:text-zinc-300 transition-colors">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

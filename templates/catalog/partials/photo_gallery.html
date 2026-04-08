@@ -1,0 +1,35 @@
+{% with photos=entity.photos.all %}
+{% if photos %}
+<div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+    {% for photo in photos %}
+    <div class="relative group aspect-square rounded-lg overflow-hidden bg-zinc-800">
+        <img src="{{ photo.image.url }}" class="w-full h-full object-cover" alt="">
+        {% if photo.is_primary %}
+        <span class="absolute top-1 left-1 text-xs bg-brand text-white px-1.5 py-0.5 rounded font-medium">Primary</span>
+        {% endif %}
+        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+            {% if not photo.is_primary %}
+            <button
+                hx-post="{% url 'catalog:set_primary_photo' entity.slug photo.id %}"
+                hx-target="#photo-gallery"
+                hx-swap="innerHTML"
+                class="text-xs bg-zinc-700 hover:bg-zinc-600 text-zinc-200 rounded px-2 py-1 transition-colors">
+                Set primary
+            </button>
+            {% endif %}
+            <button
+                hx-post="{% url 'catalog:delete_photo' entity.slug photo.id %}"
+                hx-target="#photo-gallery"
+                hx-swap="innerHTML"
+                hx-confirm="Delete this photo?"
+                class="text-xs bg-red-900/60 hover:bg-red-900 text-red-300 rounded px-2 py-1 transition-colors">
+                Delete
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-sm text-zinc-600 py-4 text-center">No photos yet. Upload one above.</p>
+{% endif %}
+{% endwith %}
